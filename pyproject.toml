@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pssl"
+version = "0.0.1"
+authors = [
+  { name="Vivien Cabannes", email="vivc@meta.com" },
+]
+description = "Research library to investigate principles behind self-supervised learning."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/fairinternal/PSSL"
+"Bug Tracker" = "https://github.com/fairinternal/PSSL/issues"

@@ -1,0 +1,6 @@
+
+*_pycache_*
+dist/
+*.egg-info/
+
+savings/
