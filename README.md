@@ -14,7 +14,7 @@ Requirements are provided in the [`requirements.txt`](requirements.txt) files
 To build PSSL, download the source code.
 Using `git` and `ssh` this can be done by running the following command.
 ```shell
-git clone --depth 1 git@github.com:fairinternal/PSSL.git
+git clone --depth 1 git@github.com:VivienCabannes/laplacian.git
 ```
 It can be built from the root folder with the python package installer
 ```shell
