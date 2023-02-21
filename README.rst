@@ -47,11 +47,15 @@ For generalized eigenvalues decomposition, see `torch.lobpcg`.
 
 References
 ----------
-.. [PIL20] Statistical estimation of the poincaré constant and application to sampling multimodal distributions, 
-   Loucas Pillaud-Vivien et al., *AISTATS*, 2020
+.. [PIL20] `Statistical estimation of the poincaré constant and application to sampling multimodal distributions`_, 
+   Loucas Pillaud-Vivien, Francis Bach, Tony Lelièvre, Alessandro Rudi, Gabriel Stoltz, *AISTATS*, 2020.
+.. _Statistical estimation of the poincaré constant and application to sampling multimodal distributions: https://arxiv.org/abs/1910.14564
 
-.. [CAB21] Overcoming the curse of dimensionality with Laplacian regularization
-   in semi-supervised learning, Cabannes et al., *NeurIPS*, 2021
+.. [CAB21] `Overcoming the curse of dimensionality with Laplacian regularization
+   in semi-supervised learning`_, Vivien Cabannes, Loucas Pillaud-Vivien, Francis Bach and Alessandro Rudi, *NeurIPS*, 2021.
+.. _Overcoming the curse of dimensionality with Laplacian regularization
+   in semi-supervised learning: https://arxiv.org/abs/2009.04324
 
-.. [PIL23] Kernelized Diffusion maps, 
-   Loucas Pillaud-Vivien et al., *ArXiv*, 2023
+.. [PIL23] `Kernelized Diffusion maps`_, 
+   Loucas Pillaud-Vivien and Francis Bach, *ArXiv*, 2023<SO>`_.
+.. _Kernelized Diffusion maps: https://arxiv.org/abs/2302.06757
