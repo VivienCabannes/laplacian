@@ -1,4 +1,3 @@
-
 from .kernels import (
     exp_kernel,
     exp_laplacian,

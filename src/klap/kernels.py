@@ -1,13 +1,22 @@
+"""
+Fast implementation of operator at play to estimate Laplacian eigendecomposition.
+
+@ Vivien Cabannes, 2023
+
+Notes
+-----
+Could be nice to implement it in pytorch to run it on GPUs.
+"""
 import numba
 import numpy as np
-from .aux_linalg import (
+from .helper import (
     distance,
     distance_square,
     scalar_product,
 )
 
 
-def rbf_kernel(x1, x2, sigma=1):
+def rbf_kernel(x1, x2, sigma: float = 1):
     r"""
     Computation of the Gaussian kernel
     .. math::
@@ -17,7 +26,7 @@ def rbf_kernel(x1, x2, sigma=1):
     ----------
     x1: ndarray of size (n, d)
     x2: ndarray of size (n, d)
-    sigma: float (optional, default is 1)
+    sigma
         Bandwidth parameter for the kernel
 
     Returns
@@ -30,7 +39,7 @@ def rbf_kernel(x1, x2, sigma=1):
     return K
 
 
-def exp_kernel(x1, x2, sigma=1):
+def exp_kernel(x1, x2, sigma: float = 1):
     r"""
     Computation of the exponential kernel
     .. math::
@@ -40,7 +49,7 @@ def exp_kernel(x1, x2, sigma=1):
     ----------
     x1: ndarray of size (n, d)
     x2: ndarray of size (n, d)
-    sigma: float (optional, default is 1)
+    sigma
         Bandwidth parameter for the kernel
 
     Returns
@@ -53,7 +62,7 @@ def exp_kernel(x1, x2, sigma=1):
     return K
 
 
-def rbf_laplacian(x_repr, x, sigma=1, K=None):
+def rbf_laplacian(x_repr, x, sigma: float = 1, K=None):
     r"""
     Computation of the discrete Laplacian operator for the gaussian kernel
     .. math::
@@ -65,7 +74,7 @@ def rbf_laplacian(x_repr, x, sigma=1, K=None):
         ::math:`x_repr = y` representer to discretize `L^2`
     x: ndarray of size (n, d)
         Data to estimate the distribution on `L^2(X)`
-    sigma: float (optional, default is 1)
+    sigma
         Bandwidth parameter for the kernel
     K: ndarray of size (p, n) (optional, default is None)
         Pre-computation of the gaussian kernel `k(x_repr, x)`
@@ -84,7 +93,7 @@ def rbf_laplacian(x_repr, x, sigma=1, K=None):
     return L
 
 
-def exp_laplacian(x_repr, x, sigma=1, K=None):
+def exp_laplacian(x_repr, x, sigma: float = 1, K=None):
     r"""
     Computation of the discrete Laplacian operator for the exponential kernel
     .. math::
@@ -96,7 +105,7 @@ def exp_laplacian(x_repr, x, sigma=1, K=None):
         ::math:`x_repr = y` representer to discretize `L^2`
     x: ndarray of size (n, d)
         Data to estimate the distribution on `L^2(X)`
-    sigma: float (optional, default is 1)
+    sigma
         Bandwidth parameter for the kernel
     K: ndarray of size (p, n) (optional, default is None)
         Pre-computation of the gaussian kernel `k(x_repr, x)`
