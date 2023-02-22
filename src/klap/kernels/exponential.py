@@ -1,0 +1,82 @@
+"""
+Fast implementation of operator at play to estimate Laplacian eigendecomposition.
+
+@ Vivien Cabannes, 2023
+"""
+import numba
+import numpy as np
+from .helper import (
+    distance,
+    scalar_product,
+)
+
+
+def exp_kernel(x1, x2, sigma: float = 1):
+    r"""
+    Computation of the exponential kernel
+    .. math::
+        K[i,j] = \exp(-\| x1[i, :] - x2[j,:] / \sigma \|)
+
+    Parameters
+    ----------
+    x1: ndarray of size (n, d)
+    x2: ndarray of size (n, d)
+    sigma
+        Bandwidth parameter for the kernel
+
+    Returns
+    -------
+    K: ndarray of size (n, n)
+    """
+    K = distance(x1, x2)
+    K /= -sigma
+    np.exp(K, out=K)
+    return K
+
+
+def exp_laplacian(x_repr, x, sigma: float = 1, K=None):
+    r"""
+    Computation of the discrete Laplacian operator for the exponential kernel
+    .. math::
+        L[i,j] = \sum_{k} \nabla_{x} k(x_k, y_i)^\top \nabla_x k(x_i, y_j)
+
+    Parameters
+    ----------
+    x_repr: ndarray of size (p, d)
+        ::math:`x_repr = y` representer to discretize `L^2`
+    x: ndarray of size (n, d)
+        Data to estimate the distribution on `L^2(X)`
+    sigma
+        Bandwidth parameter for the kernel
+    K: ndarray of size (p, n) (optional, default is None)
+        Pre-computation of the gaussian kernel `k(x_repr, x)`
+
+    Returns
+    -------
+    L: ndarray of size (p, p)
+    """
+    if K is None:
+        K = exp_kernel(x_repr, x, sigma=sigma)
+    S_in = scalar_product(x_repr, x_repr)
+    S = scalar_product(x_repr, x)
+    S_out = np.sum(x**2, axis=1)
+    L = _exp_laplacian(K, S, S_in, S_out)
+    L *= 1 / sigma**2
+    return L
+
+
+@numba.jit("f8[:, :](f8[:, :], f8[:, :], f8[:, :], f8[:])")
+def _exp_laplacian(K, S, S_in, S_out):
+    p, n = K.shape
+    out = np.zeros((p, p), dtype=np.float64)
+    for i in range(p):
+        for j in range(p):
+            for k in range(n):
+                norm = S_out[k] - 2 * S[i, k] + S_in[i, i]
+                norm *= S_out[k] - 2 * S[j, k] + S_in[j, j]
+                tmp = S_out[k] - S[i, k] - S[j, k] + S_in[i, j]
+                if norm <= 0:
+                    norm = 1
+                    tmp = 0
+                out[i, j] += K[i, k] * K[j, k] * tmp / np.sqrt(norm)
+    return out
