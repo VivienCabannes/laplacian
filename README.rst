@@ -57,5 +57,5 @@ References
    in semi-supervised learning: https://arxiv.org/abs/2009.04324
 
 .. [PIL23] `Kernelized Diffusion maps`_, 
-   Loucas Pillaud-Vivien and Francis Bach, *ArXiv*, 2023<SO>`_.
+   Loucas Pillaud-Vivien and Francis Bach, *ArXiv*, 2023.
 .. _Kernelized Diffusion maps: https://arxiv.org/abs/2302.06757
