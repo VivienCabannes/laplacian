@@ -2,6 +2,10 @@
 Fast implementation of operator at play to estimate Laplacian eigendecomposition.
 
 @ Vivien Cabannes, 2023
+
+TODO
+----
+Make it a class and format it like scikit-learn.
 """
 import numba
 import numpy as np
@@ -38,7 +42,7 @@ def exp_laplacian(x_repr, x, sigma: float = 1, K=None):
     r"""
     Computation of the discrete Laplacian operator for the exponential kernel
     .. math::
-        L[i,j] = \sum_{k} \nabla_{x} k(x_k, y_i)^\top \nabla_x k(x_i, y_j)
+        L[i,j] = \sum_{k} \nabla_x k(x_k, y_i)^\top \nabla_x k(x_k, y_j)
 
     Parameters
     ----------

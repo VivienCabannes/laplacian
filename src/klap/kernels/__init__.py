@@ -6,3 +6,5 @@ from .gaussian import (
     rbf_kernel,
     rbf_laplacian,
 )
+
+from .polynomial import PolynomialKernel
