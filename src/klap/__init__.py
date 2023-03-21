@@ -1,6 +1,6 @@
 
 from .kernels import (
     ExponentialKernel,
-    FastGaussianKernel,
+    GaussianKernel,
     PolynomialKernel,
 )

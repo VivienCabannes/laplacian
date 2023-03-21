@@ -13,11 +13,13 @@ from .helper import (
 from .kernel_laplacian import KernelLaplacian
 
 
-class FastGaussianKernel(KernelLaplacian):
+class GaussianKernel(KernelLaplacian):
     """
     Gaussian kernel.
 
-    Class to build `L` with less flops than generic distance kernel computation.
+    The Gaussian kernel is defined as
+    .. math::
+        K[i,j] = \exp(-\| (x1[i, :] - x2[j,:]) / \sigma \|^2)
 
     Parameters
     ----------
@@ -26,7 +28,7 @@ class FastGaussianKernel(KernelLaplacian):
 
     Notes
     -----
-    This could be improved by avoiding redundant calculations of inner products and related quantities.
+    Class to build `L` with less flops than generic distance kernel computation.
     """
 
     def __init__(self, sigma: float = 1):

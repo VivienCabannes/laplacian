@@ -8,7 +8,7 @@ import numpy as np
 from .distance_kernel import DistanceKernel
 
 
-class GaussianKernel(DistanceKernel):
+class SlowGaussianKernel(DistanceKernel):
     r"""
     Gaussian kernel.
 
