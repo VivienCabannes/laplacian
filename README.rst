@@ -5,7 +5,8 @@ KLAP: Continuous (kernel) Laplacian spectral embedding
 :Topic: Fast Implementation of Laplacian eigenvectors and eigenvalues estimation with kernel methods
    developped in [PIL20]_, [CAB21]_, [PIL23]_.
 :Author: Vivien Cabannes
-:Version: 0.0.2 of 2023/03/21
+:Nighly Version: 0.0.3
+:Stable Version: 0.0.2 of 2023/03/21
 
 Installation
 ------------
@@ -25,7 +26,9 @@ Once download, our packages can be install through the following command.
 .. code:: shell
 
    $ cd <path to code folder>
-   $ pip install .
+   $ pip install -e .
+
+This notably useful to add kernel and modify the codebase.
 
 Usage
 -----

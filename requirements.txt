@@ -1,6 +1,9 @@
 
+# for the codebase
 numba
 numpy
 scipy
+
+# to run the examples
 matplotlib
 jupyter

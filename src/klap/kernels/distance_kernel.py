@@ -30,6 +30,15 @@ class DistanceKernel(KernelLaplacian):
         .. math::
             k(x, y) = q(\| x - y \|)
 
+        Parameters
+        ----------
+        N: ndarray of size (n1, n2)
+            Distance matrix
+        inplace:
+            If True, the computation is done inplace
+
+        Notes
+        -----
         To be implemented by children classes
         """
         raise NotImplementedError
@@ -38,6 +47,15 @@ class DistanceKernel(KernelLaplacian):
         """
         Derivative of `q_function`.
 
+        Parameters
+        ----------
+        N: ndarray of size (n1, n2)
+            Distance matrix
+        inplace:
+            If True, the computation is done inplace
+
+        Notes
+        -----
         To be implemented by children classes
         """
         raise NotImplementedError

@@ -24,6 +24,15 @@ class DotProductKernel(KernelLaplacian):
         .. math::
             k(x, y) = q(x^\top y)
 
+        Parameters
+        ----------
+        X: ndarray of size (n1, n2)
+            Dot-product matrix
+        inplace:
+            If True, the computation is done inplace
+
+        Notes
+        -----
         To be implemented by children classes
         """
         raise NotImplementedError
@@ -32,6 +41,8 @@ class DotProductKernel(KernelLaplacian):
         """
         Derivative of `q_function`.
 
+        Notes
+        -----
         To be implemented by children classes
         """
         raise NotImplementedError
@@ -44,6 +55,13 @@ class DotProductKernel(KernelLaplacian):
         ----------
         x1: ndarray of size (n, d)
         x2: ndarray of size (n, d)
+
+        Parameters
+        ----------
+        X: ndarray of size (n1, n2)
+            Dot-product matrix
+        inplace:
+            If True, the computation is done inplace
 
         Returns
         -------

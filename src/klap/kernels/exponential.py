@@ -54,7 +54,7 @@ class ExponentialKernel(DistanceKernel):
 
         Parameters
         ----------
-        X: ndarray of size (n1, n2)
+        N: ndarray of size (n1, n2)
             Distance matrix
         inplace:
             If True, the computation is done inplace

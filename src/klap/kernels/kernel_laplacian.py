@@ -39,8 +39,6 @@ class KernelLaplacian:
         .. math::
             K[i,j] = k(x1[i], x2[j])
 
-        To be implemented by children classes
-
         Parameters
         ----------
         x1: ndarray of size (n, d)
@@ -49,6 +47,10 @@ class KernelLaplacian:
         Returns
         -------
         K: ndarray of size (n, n)
+
+        Notes
+        -----
+        To be implemented by children classes
         """
         raise NotImplementedError
 
@@ -57,8 +59,6 @@ class KernelLaplacian:
         Computation of the discrete Laplacian operator
         .. math::
             L[i,j] = \sum_{k} \nabla_x k(x_k, y_i)^\top \nabla_x k(x_k, y_j)
-
-        To be implemented by children classes
 
         Parameters
         ----------
@@ -70,6 +70,10 @@ class KernelLaplacian:
         Returns
         -------
         L: ndarray of size (p, p)
+
+        Notes
+        -----
+        To be implemented by children classes
         """
         raise NotImplementedError
 
@@ -79,8 +83,7 @@ class KernelLaplacian:
         .. math::
             R[i,j] = \sum_{k} k(x_k, y_i)^\top k(x_k, y_j)
 
-        To be implemented by children classes
-
+        Parameters
         ----------
         x_repr: ndarray of size (p, d)
             ::math:`x_repr = y` representer to discretize `L^2`
@@ -88,6 +91,10 @@ class KernelLaplacian:
             Data to estimate the distribution on `L^2(X)`
         K: ndarray of size (p, n) (optional, default is None)
             Pre-computation of the kernel `k(x_repr, x)`
+
+        Notes
+        -----
+        To be re-implemented by children classes
         """
         if K is None:
             K = self.kernel(x_repr, x)
