@@ -1,9 +1,8 @@
 
-- Implement polynomial kernel.
-- Implement a function that return Laplacian eigenvalues.
 - Implement a clustering algorithm
-- Implement diffusion distance \sum \lambda_i \|\phi_i(x) - \phi_i(y)\|.
 - Find a set of problem that are solved with diffusion maps, and solve them with klap.
+- Implement the method with a finite number of features.
+- Implement graph-Laplacian
 
 
 Real world validation:

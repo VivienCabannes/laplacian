@@ -24,7 +24,7 @@ def scalar_product(x1, x2):
     return x1 @ x2.T
 
 
-def distance_square(x1, x2):
+def distance_square(x1, x2, scap=None):
     r"""
     Computation of
     .. math::
@@ -34,12 +34,17 @@ def distance_square(x1, x2):
     ----------
     x1: ndarray of size (n, d)
     x2: ndarray of size (n, d)
+    scap: ndarray of size (n, n) (optional, default is None)
+        Pre-computation of the scalar product `x1 @ x2.T`
 
     Returns
     -------
     out: ndarray of size (n, n)
     """
-    out = scalar_product(x1, x2)
+    if scap is None:
+        out = scalar_product(x1, x2)
+    else:
+        out = scap.copy()
     out *= -2
     out += np.sum(x1**2, axis=1)[:, np.newaxis]
     out += np.sum(x2**2, axis=1)
@@ -47,7 +52,7 @@ def distance_square(x1, x2):
     return out
 
 
-def distance(x1, x2):
+def distance(x1, x2, scap=None):
     r"""
     Computation of
     .. math::
@@ -57,11 +62,13 @@ def distance(x1, x2):
     ----------
     x1: ndarray of size (n, d)
     x2: ndarray of size (n, d)
+    scap: ndarray of size (n, n) (optional, default is None)
+        Pre-computation of the scalar product `x1 @ x2.T`
 
     Returns
     -------
     out: ndarray of size (n, n)
     """
-    out = distance_square(x1, x2)
+    out = distance_square(x1, x2, scap=scap)
     np.sqrt(out, out=out)
     return out
