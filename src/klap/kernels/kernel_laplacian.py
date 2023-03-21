@@ -1,13 +1,72 @@
+import logging
+
 import numpy as np
 from scipy.linalg import eigh
 
+from .helper import scalar_product
+
+logger = logging.getLogger("klap")
+logger.setLevel(logging.INFO)
+
 
 class KernelLaplacian:
+    """
+    Based class to estimate Laplacian through kernel methods
+
+    Specification to be implementated by children classes.
+    """
+
     def __init__(self, p=None, k=16):
+        self.kernel_type = ""
         self.p = p
         self.k = k
 
-    def fit(self, x, p=None, k=None, verbose=False):
+    def laplacian(self, x_repr, x, **karwgs):
+        r"""
+        Computation of the discrete Laplacian operator
+        .. math::
+            L[i,j] = \sum_{k} \nabla_x k(x_k, y_i)^\top \nabla_x k(x_k, y_j)
+
+        To be implemented by children classes
+
+        Parameters
+        ----------
+        x_repr: ndarray of size (p, d)
+            ::math:`x_repr = y` representer to discretize `L^2`
+        x: ndarray of size (n, d)
+            Data to estimate the distribution on `L^2(X)`
+
+        Returns
+        -------
+        L: ndarray of size (p, p)
+        """
+        raise NotImplementedError
+
+    def nystrom(self, x_repr, x, **kargs):
+        r"""
+        Computation of the discrete Nystrom operator
+        .. math::
+            R[i,j] = \sum_{k} k(x_k, y_i)^\top k(x_k, y_j)
+
+        To be implemented by children classes
+
+        ----------
+        x_repr: ndarray of size (p, d)
+            ::math:`x_repr = y` representer to discretize `L^2`
+        x: ndarray of size (n, d)
+            Data to estimate the distribution on `L^2(X)`
+        """
+        raise NotImplementedError
+
+    def fit(
+        self,
+        x,
+        p=None,
+        k=None,
+        L_reg: float = 1e-7,
+        R_reg: float = 0,
+        inverse_L: bool = True,
+    ):
         """
         Estimate Laplacian operator based on data.
 
@@ -18,9 +77,13 @@ class KernelLaplacian:
         p: int (optional, default is None)
             Number of representer points to use
         k: int (optional, default is None)
-            Number of eigenvalues to compute
-        verbose: bool (optional, default is False)
-            If True, the eigenvalues are returned
+            Number of eigenvalues to compute. If None, k will be taken as self.k
+        L_reg: float (optional, default is `1e-7`)
+            Regularization parameter for Laplacian matrix
+        R_reg: float (optional, default is 0)
+            Regularization parameter for Nystrom matrix
+        inverse_L: bool (optional, default is True)
+            Either to inverse L or R in the GEVD system
 
         Returns
         -------
@@ -36,24 +99,49 @@ class KernelLaplacian:
             else:
                 p = self.p
         self.x_repr = x[:p]
-        L = self.laplacian(self.x_repr, x)
-        R = self.nystrom(self.x_repr, x)
+
+        if self.kernel_type == "dotproduct":
+            logger.info("Dot product kernel computation")
+            X = scalar_product(self.x_repr, x)
+            X_repr = scalar_product(self.x_repr, self.x_repr)
+            L = self.laplacian(None, None, X=X, X_repr=X_repr)
+            R = self.nystrom(None, None, X=X)
+        elif self.kernel_type == "distance":
+            raise NotImplementedError
+        else:
+            logger.info("Non-spectific kernel computation")
+            L = self.laplacian(self.x_repr, x)
+            R = self.nystrom(self.x_repr, x)
+
         L /= n
         R /= n
 
-        # Regularization
-        error = eigh(L, eigvals_only=True, subset_by_index=[0, 0])[0]
-        if error < 0:
-            # numerical leads to negative eigenvalues
-            reg = -error * 1.1
-        if error > 0:
-            reg = 1e-7
-        L += reg * np.eye(len(L))
-        lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
+        if inverse_L:
+            logging.info("Inversing L")
+            error = eigh(L, eigvals_only=True, subset_by_index=[0, 0])[0]
+            if error < 0:
+                logger.info("Matrix is not sdp.")
+                reg = -error * 10
+                if L_reg < reg:
+                    L_reg = reg
+                logger.info(f"Setting regularizer to {L_reg:.7f}")
+            L += L_reg * np.eye(p)
+            R += R_reg * np.eye(p)
+            lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
+        else:
+            logging.info("Inversing R")
+            error = eigh(R, eigvals_only=True, subset_by_index=[0, 0])[0]
+            if error < 0:
+                logger.info("Matrix is not sdp.")
+                reg = -error * 1.1
+                if R_reg < reg:
+                    R_reg = reg
+                logger.info(f"Setting regularizer to {R_reg:.7f}")
+            L += L_reg * np.eye(p)
+            R += R_reg * np.eye(p)
+            lambdas, alphas = eigh(L, R, subset_by_index=[0, k])
         self.lambdas = lambdas
         self.alphas = alphas
-        if verbose:
-            return lambdas, alphas
 
     def features_map(self, x):
         """

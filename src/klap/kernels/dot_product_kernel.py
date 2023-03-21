@@ -8,13 +8,32 @@ from .kernel_laplacian import KernelLaplacian
 
 
 class DotProductKernel(KernelLaplacian):
-    def __init__(self):
-        pass
+    """
+    Base class for dot-product kernels
 
-    def q_function(self, *args, **kwargs):
+    Specification to be implementation by children classes.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.kernel_type = "dotproduct"
+
+    def q_function(self, X, inplace: bool = True):
+        r"""
+        Function to compute dot-product kernel
+        .. math::
+            k(x, y) = q(x^\top y)
+
+        To be implemented by children classes
+        """
         raise NotImplementedError
 
-    def q_function_derivative(self, *args, **kwargs):
+    def q_function_derivative(self, X, inplace: bool = True):
+        """
+        Derivative of `q_function`.
+
+        To be implemented by children classes
+        """
         raise NotImplementedError
 
     def kernel(self, x1, x2):
@@ -31,7 +50,7 @@ class DotProductKernel(KernelLaplacian):
         K: ndarray of size (n, n)
         """
         X = scalar_product(x1, x2)
-        return self.q_function(X)
+        return self.q_function(X, inplace=True)
 
     def laplacian(self, x_repr, x, X=None, X_repr=None):
         r"""
@@ -54,9 +73,11 @@ class DotProductKernel(KernelLaplacian):
         -------
         L: ndarray of size (p, p)
         """
+        inplace = False
         if X is None:
             X = scalar_product(x_repr, x)
-        Qprime = self.q_function_derivative(X)
+            inplace = True
+        Qprime = self.q_function_derivative(X, inplace=inplace)
         L = Qprime @ Qprime.T
         if X_repr is None:
             X_repr = scalar_product(x_repr, x_repr)
@@ -80,8 +101,10 @@ class DotProductKernel(KernelLaplacian):
             Pre-computation of the gaussian kernel `k(x_repr, x)`
         """
         if K is None:
+            inplace = False
             if X is None:
                 X = scalar_product(x_repr, x)
-            K = self.q_function(X)
+                inplace = True
+            K = self.q_function(X, inplace=inplace)
         R = K @ K.T
         return R

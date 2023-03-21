@@ -19,12 +19,16 @@ class PolynomialKernel(DotProductKernel):
     d:
         Degree of the polynomial kernel
     """
+
     def __init__(self, d: int = 1):
+        super().__init__()
         self.d = d
 
     def q_function(self, X, inplace: bool = True):
-        """
+        r"""
         Function to compute the kernel from dot-product matrix.
+        .. math::
+            q(x) = (1 + x)^d
 
         Parameters
         ----------
@@ -40,8 +44,10 @@ class PolynomialKernel(DotProductKernel):
         return X
 
     def q_function_derivative(self, X, inplace: bool = True):
-        """
+        r"""
         Function to compute the derivative of the kernel from dot-product matrix.
+        .. math::
+            q'(x) = d (1 + x)^{d-1}
 
         Parameters
         ----------
