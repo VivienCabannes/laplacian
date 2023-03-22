@@ -15,4 +15,5 @@ Ablation study:
 
 Testing suite:
 - Add test to check for derivatives computations (q and  q').
-- Eventually test for graph Laplacian computation with basic example in 1d, 2d, and d dimensions.
+- Eventually test for graph Laplacian computation with basic example in 1d, 2d, and d dimensions [L = Id, L_reg = 1, R = diag(lambda_i), ...]
+
