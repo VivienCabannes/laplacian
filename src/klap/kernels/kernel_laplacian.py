@@ -24,8 +24,8 @@ class KernelLaplacian:
 
     Attributes
     ----------
-    eigenvalues: ndarray of size (k,)
-        Eigenvalues of the Laplacian
+    lambdas: ndarray of size (k,)
+        Eigenvalues of the Laplacian operator
     """
 
     def __init__(self, p=None, k=16):
@@ -127,13 +127,6 @@ class KernelLaplacian:
             Regularization parameter for Nystrom matrix
         inverse_L: bool (optional, default is False)
             Either to inverse L or R in the GEVD system.
-
-        Returns
-        -------
-        lambdas: ndarray of size (k,)
-            Eigenvalues of the Laplacian operator
-        alphas: ndarray of size (p, k)
-            Eigenvectors of the Laplacian operator
         """
         # Parsing arguemetns
         n = len(x)
@@ -178,6 +171,11 @@ class KernelLaplacian:
         L /= n
         R /= n
 
+        # Solving generalized eigenvalue problem and storing results
+        self.eigenvalues, self.alphas = self.solving_gevd(L, R, L_reg, R_reg, k, p, inverse_L)
+
+    @staticmethod
+    def solving_gevd(L, R, L_reg, R_reg, k, p, inverse_L):
         # Solving generalized eigenvalue problem
         if inverse_L:
             logging.info("Inversing L")
@@ -191,10 +189,7 @@ class KernelLaplacian:
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
-
-            # Storing results
-            self.eigenvalues = lambdas[::-1] ** -1
-            self.alphas = alphas[:, ::-1]
+            return lambdas[::-1] ** -1, alphas[:, ::-1]
         else:
             logger.info("Inversing R")
             error = eigh(R, eigvals_only=True, subset_by_index=[0, 0])[0]
@@ -207,10 +202,66 @@ class KernelLaplacian:
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(L, R, subset_by_index=[0, k])
+            return lambdas, alphas
 
-            # Storing results
-            self.eigenvalues = lambdas
-            self.alphas = alphas
+    def fit_with_graph_laplacian(
+        self,
+        weight_kernel,
+        x,
+        p=None,
+        k=None,
+        L_reg: float = 0,
+        R_reg: float = 0,
+        inverse_L: bool = False,
+    ):
+        """
+        Estimate Laplacian operator based on data with graph Laplacian.
+
+        Parameters
+        ----------
+        weight_kernel: function
+            Function to compute weight matrix from two data matrix of size
+        x: ndarray of size (n, d)
+            Data matrix
+        p: int (optional, default is None)
+            Number of representer points to use
+        k: int (optional, default is None)
+            Number of eigenvalues to compute. If None, k will be taken as self.k (default is 16)
+        L_reg: float (optional, default is 0)
+            Regularization parameter for Laplacian matrix
+        R_reg: float (optional, default is 0)
+            Regularization parameter for Nystrom matrix
+        inverse_L: bool (optional, default is False)
+            Either to inverse L or R in the GEVD system.
+        """
+        # Parsing arguemetns
+        n = len(x)
+        if p is None:
+            if self.p is None:
+                p = n
+            else:
+                p = self.p
+        if k is None:
+            k = self.k
+        k = min(k, p - 1)
+
+        # Selecting representer points
+        self.x_repr = x[:p]
+
+        W = weight_kernel(x, x)
+        D = np.sqrt(W.sum(axis=0))
+        W /= D[:, np.newaxis]
+        W /= D
+        K = self.kernel(self.x_repr, x)
+        R = K @ K.T
+        L = K @ W @ K.T
+        L *= -1
+        L += R
+        L /= n
+        R /= n
+
+        # Solving generalized eigenvalue problem and storing results
+        self.eigenvalues, self.alphas = self.solving_gevd(L, R, L_reg, R_reg, k, p, inverse_L)
 
     def features_map(self, x):
         """
