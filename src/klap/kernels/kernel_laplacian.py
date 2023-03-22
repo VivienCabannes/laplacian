@@ -191,6 +191,10 @@ class KernelLaplacian:
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
+
+            # Storing results
+            self.eigenvalues = lambdas[::-1] ** -1
+            self.alphas = alphas[:, ::-1]
         else:
             logger.info("Inversing R")
             error = eigh(R, eigvals_only=True, subset_by_index=[0, 0])[0]
@@ -204,9 +208,9 @@ class KernelLaplacian:
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(L, R, subset_by_index=[0, k])
 
-        # Storing results
-        self.eigenvalues = lambdas
-        self.alphas = alphas
+            # Storing results
+            self.eigenvalues = lambdas
+            self.alphas = alphas
 
     def features_map(self, x):
         """
