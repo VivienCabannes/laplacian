@@ -42,7 +42,7 @@ parser.add_argument(
 parser.add_argument(
     "--graph-Laplacian", 
     action="store_true",
-    description="Use graph Laplacian instead of fkernel Laplacian",
+    help="Use graph Laplacian instead of fkernel Laplacian",
 )
 parser.add_argument(
     "-e",
@@ -60,7 +60,7 @@ parser.add_argument(
     help="Number of eigenvalues to estimate",
     type=int,
 )
-config = parser.parse_args()
+config = parser.parse_args(['gaussian'])
 
 
 name = config.name

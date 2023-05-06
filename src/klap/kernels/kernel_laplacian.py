@@ -186,7 +186,13 @@ class KernelLaplacian:
                 logger.debug(f"Matrix is not sdp. Setting regularizer to {L_reg:.3e}")
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
-            lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
+            try:
+                lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
+            except np.linalg.LinAlgError as e:
+                logging.warning("Error inverting matrix.")
+                logging.warning(e)
+                lambdas = np.zeros(k)
+                alphas = np.zeros((p, k))
             return lambdas[::-1] ** -1, alphas[:, ::-1]
         else:
             logger.debug("Inversing R")
