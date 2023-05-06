@@ -6,7 +6,6 @@ from scipy.linalg import eigh
 from .helper import distance, scalar_product
 
 logger = logging.getLogger("klap")
-logger.setLevel(logging.INFO)
 
 
 class KernelLaplacian:
@@ -144,13 +143,13 @@ class KernelLaplacian:
 
         # Building generalized eigenvalue problem
         if self.kernel_type == "dotproduct":
-            logger.info("Dot product kernel computation")
+            logger.debug("Dot product kernel computation")
             X = scalar_product(self.x_repr, x)
             X_repr = X[:, :p]
             L = self.laplacian(None, None, X=X, X_repr=X_repr)
             R = self.nystrom(None, None, X=X)
         elif self.kernel_type == "distance":
-            logger.info("Distance kernel computation")
+            logger.debug("Distance kernel computation")
             X = scalar_product(self.x_repr, x)
             X_repr = X[:, :p]
             N = distance(self.x_repr, x, scap=X)
@@ -165,7 +164,7 @@ class KernelLaplacian:
             L = self.laplacian(None, None, K=K, X=X, X_repr=X_repr, D=D)
             R = self.nystrom(None, None, K=K)
         else:
-            logger.info("Non-spectific kernel computation")
+            logger.debug("Non-spectific kernel computation")
             L = self.laplacian(self.x_repr, x)
             R = self.nystrom(self.x_repr, x)
         L /= n
@@ -178,27 +177,25 @@ class KernelLaplacian:
     def solving_gevd(L, R, L_reg, R_reg, k, p, inverse_L):
         # Solving generalized eigenvalue problem
         if inverse_L:
-            logging.info("Inversing L")
+            logging.debug("Inversing L")
             error = eigh(L, eigvals_only=True, subset_by_index=[0, 0])[0]
             if error < 0:
-                logger.info("Matrix is not sdp.")
                 reg = -error * 10
                 if L_reg < reg:
                     L_reg = reg
-                logger.info(f"Setting regularizer to {L_reg:.3e}")
+                logger.debug(f"Matrix is not sdp. Setting regularizer to {L_reg:.3e}")
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(R, L, subset_by_index=[len(L) - k, len(L) - 1])
             return lambdas[::-1] ** -1, alphas[:, ::-1]
         else:
-            logger.info("Inversing R")
+            logger.debug("Inversing R")
             error = eigh(R, eigvals_only=True, subset_by_index=[0, 0])[0]
             if error < 0:
-                logger.info("Matrix is not sdp.")
                 reg = -error * 1.1
                 if R_reg < reg:
                     R_reg = reg
-                logger.info(f"Setting regularizer to {R_reg:.3e}")
+                logger.debug(f"Matrix is not sdp. Setting regularizer to {R_reg:.3e}")
             L += L_reg * np.eye(p)
             R += R_reg * np.eye(p)
             lambdas, alphas = eigh(L, R, subset_by_index=[0, k])

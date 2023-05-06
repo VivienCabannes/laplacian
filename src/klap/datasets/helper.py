@@ -28,6 +28,15 @@ def spherical_harmonic(x, num, return_eigenvalues=False, dtype=float):
     return out
 
 
+def spherical_eigenvalues(k):
+    L = np.ceil(np.sqrt(k)).astype(int)
+    eigenvalues = np.zeros(L**2)
+    for degree in range(L):
+        eigenvalues[degree ** 2:(degree + 1) ** 2] = degree * (degree + 1)
+    eigenvalues = eigenvalues[:k]
+    return eigenvalues
+
+
 def meshgrid_3d(n):
     theta = np.linspace(0, 2 * np.pi, n)
     phi = np.linspace(0, np.pi, n)
