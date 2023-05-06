@@ -96,7 +96,7 @@ class GaussianKernel(KernelLaplacian):
         return L
 
     @staticmethod
-    @numba.jit("f8[:, :](f8[:, :], f8[:, :], f8[:, :], f8[:])")
+    @numba.jit("f8[:, :](f8[:, :], f8[:, :], f8[:, :], f8[:])", nopython=True)
     def _laplacian(K, X, X_repr, D):
         p, n = K.shape
         out = np.zeros((p, p), dtype=np.float64)

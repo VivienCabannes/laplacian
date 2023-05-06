@@ -5,7 +5,7 @@ import numba
 import numpy as np
 
 
-@numba.jit("f8[:, :, :](f8[:, :], f8[:, :], f8[:, :], f8[:])")
+@numba.jit("f8[:, :, :](f8[:, :], f8[:, :], f8[:, :], f8[:])", nopython=True)
 def _rbf_laplacian_debug(K, S, S_in, S_out):
     p, n = K.shape
     out = np.zeros((p, p, n), dtype=np.float64)
@@ -17,7 +17,7 @@ def _rbf_laplacian_debug(K, S, S_in, S_out):
     return out
 
 
-@numba.jit("f8[:, :, :](f8[:, :], f8[:, :], f8[:, :], f8[:])")
+@numba.jit("f8[:, :, :](f8[:, :], f8[:, :], f8[:, :], f8[:])", nopython=True)
 def _exp_laplacian_debug(K, S, S_in, S_out):
     p, n = K.shape
     out = np.zeros((p, p, n), dtype=np.float64)
