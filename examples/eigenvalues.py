@@ -33,14 +33,14 @@ parser.add_argument(
     "name",
     choices=[
         "exponential",
-        "polynomial",
         "gaussian",
+        "polynomial",
     ],
     help="Name of the experiment",
     type=str,
 )
 parser.add_argument(
-    "--graph-Laplacian", 
+    "--graph",
     action="store_true",
     help="Use graph Laplacian instead of fkernel Laplacian",
 )
@@ -60,18 +60,18 @@ parser.add_argument(
     help="Number of eigenvalues to estimate",
     type=int,
 )
-config = parser.parse_args(['gaussian'])
+config = parser.parse_args()
 
 
 name = config.name
 nb_trials = config.nb_exp
-graph_laplacian = config.graph_Laplacian
+graph_laplacian = config.graph
 K = config.num_eigenvalues
 
 if graph_laplacian:
-    save_file = SAVE_DIR / f"eigenvalues_{name}.npy"
-else:
     save_file = SAVE_DIR / f"eigenvalues_{name}_graph.npy"
+else:
+    save_file = SAVE_DIR / f"eigenvalues_{name}.npy"
 
 np.random.seed(100)
 ns = np.logspace(1.5, 4, num=20).astype(int)
