@@ -90,14 +90,14 @@ elif name == "exponential":
     def get_kernel(sigma):
         return ExponentialKernel(sigma=sigma)
 
-    sigmas = [0.3, 1, 3, 10, 30, 100]
+    sigmas = [0.1, 1, 10, 100, 1000]
 
 elif name == "gaussian":
 
     def get_kernel(sigma):
         return GaussianKernel(sigma=sigma)
 
-    sigmas = [0.1, 0.3, 1, 3, 10, 30]
+    sigmas = [0.01, 0.1, 1, 10, 100]
 
 L_reg = 0
 R_reg = 0
@@ -117,7 +117,7 @@ for num_trial in range(nb_trials):
             for k, sigma in enumerate(sigmas):
                 kernel = get_kernel(sigma)
                 if graph_laplacian:
-                    weigth_kernel = GaussianKernel(sigma=1).kernel
+                    weigth_kernel = GaussianKernel(sigma=sigma).kernel
                     kernel.fit_with_graph_laplacian(
                         weigth_kernel,
                         x,
@@ -135,4 +135,4 @@ for num_trial in range(nb_trials):
                 kernel.eigenvalues /= ground_truth + 1
                 kernel.eigenvalues **= 2
                 errors[i, j, k] = np.mean(kernel.eigenvalues)
-                write_numpy_file(errors, save_file)
+    write_numpy_file(errors, save_file)
