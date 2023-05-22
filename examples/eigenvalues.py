@@ -69,14 +69,14 @@ graph_laplacian = config.graph
 K = config.num_eigenvalues
 
 if graph_laplacian:
-    save_file = SAVE_DIR / f"eigenvalues_{name}_graph.npy"
+    save_file = SAVE_DIR / f"new_eigenvalues_{name}_graph.npy"
 else:
-    save_file = SAVE_DIR / f"eigenvalues_{name}.npy"
+    save_file = SAVE_DIR / f"new_eigenvalues_{name}.npy"
 
 np.random.seed(100)
 ns = np.logspace(1.5, 4, num=20).astype(int)
 N = np.max(ns)
-ps = np.logspace(1.5, 3, num=10).astype(int)
+ps = np.logspace(1.5, 3, num=5).astype(int)
 
 if name == "polynomial":
 
@@ -90,14 +90,14 @@ elif name == "exponential":
     def get_kernel(sigma):
         return ExponentialKernel(sigma=sigma)
 
-    sigmas = [0.1, 1, 10, 100, 1000]
+    sigmas = [1, 10, 100]
 
 elif name == "gaussian":
 
     def get_kernel(sigma):
         return GaussianKernel(sigma=sigma)
 
-    sigmas = [0.01, 0.1, 1, 10, 100]
+    sigmas = [0.1, 1, 10]
 
 L_reg = 0
 R_reg = 0
