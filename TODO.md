@@ -1,6 +1,5 @@
 
 Implementation:
-- Implement the method with a finite number of features, notably for polynomials (could also be useful for random features).
 - Implement a neural network approach to estimate the eigenfunctions of the Laplacian operator.
 
 Real world experiments:
