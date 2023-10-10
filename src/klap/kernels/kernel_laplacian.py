@@ -134,6 +134,8 @@ class KernelLaplacian:
                 p = n
             else:
                 p = self.p
+        if p > n:
+            p = n
         if k is None:
             k = self.k
         k = min(k, p - 1)

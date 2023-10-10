@@ -40,7 +40,7 @@ class GaussianKernel(KernelLaplacian):
         r"""
         Computation of the Gaussian kernel
         .. math::
-            K[i,j] = \exp(-\| x1[i, :] - x2[j,:] / \sigma \|^2)
+            K[i,j] = \exp(-\| (x1[i, :] - x2[j,:]) / \sigma \|^2)
 
         Parameters
         ----------
@@ -54,7 +54,7 @@ class GaussianKernel(KernelLaplacian):
         K: ndarray of size (n, n)
         """
         K = distance_square(x1, x2, scap=scap)
-        K /= -(self.sigma**2)
+        K /= - self.sigma**2
         np.exp(K, out=K)
         return K
 
