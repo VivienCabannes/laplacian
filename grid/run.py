@@ -227,8 +227,8 @@ if __name__ == "__main__":
 
     # Grid runs
     grid = {
-        "n": np.unique(np.logspace(2, 5, num=10).astype(int)),
-        "d": np.arange(3, 20),
+        "n": np.unique(np.logspace(2, 4, num=10).astype(int)),
+        "d": np.arange(3, 20, 2),
         "p": np.unique(np.logspace(1.5, 3, num=5).astype(int)),
         "seed": list(range(42, 52)),
     }
@@ -261,7 +261,7 @@ if __name__ == "__main__":
     with open(outfile, "w") as f:
         pass
 
-    logger.info(f"Number of experiments: {len(list(product(*grid.values())))}")
+    logger.info(f"Number of experiments: {len(list(product(*grid.values()))) // config.num_tasks}")
 
     # Run grids
     for i, vals in enumerate(product(*grid.values())):
