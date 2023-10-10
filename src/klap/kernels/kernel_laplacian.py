@@ -134,8 +134,6 @@ class KernelLaplacian:
                 p = n
             else:
                 p = self.p
-        if p > n:
-            p = n
         if k is None:
             k = self.k
         k = min(k, p - 1)
@@ -193,8 +191,8 @@ class KernelLaplacian:
             except np.linalg.LinAlgError as e:
                 logging.warning("Error inverting matrix.")
                 logging.warning(e)
-                lambdas = np.zeros(k)
-                alphas = np.zeros((p, k))
+                lambdas = np.full(k, np.nan)
+                alphas = np.full((p, k), np.nan)
             return lambdas[::-1] ** -1, alphas[:, ::-1]
         else:
             logger.debug("Inversing R")

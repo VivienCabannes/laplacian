@@ -1,3 +1,4 @@
+import json
 import numpy as np
 
 
@@ -21,3 +22,14 @@ def read_numpy_file(filepath, dtype=np.float64, shape=None, order="C"):
         else:
             out = out.reshape(shape)
     return out
+
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
