@@ -199,7 +199,7 @@ if __name__ == "__main__":
         help="saving directory",
     )
     rset.add_argument(
-        "--save-name",
+        "--name",
         default="test",
         help="folder name for saving",
     )
@@ -253,13 +253,15 @@ if __name__ == "__main__":
         })
 
     # Output file
-    outdir = Path(config.save_dir) / config.save_name / config.kernel
+    outdir = Path(config.save_dir) / config.name / config.kernel
     outdir.mkdir(parents=True, exist_ok=True)
     outfile = outdir / f"task_{config.task_id}.jsonl"
 
     # Clean file
     with open(outfile, "w") as f:
         pass
+
+    logger.info(f"Number of experiments: {len(list(product(*grid.values())))}")
 
     # Run grids
     for i, vals in enumerate(product(*grid.values())):
