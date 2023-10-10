@@ -12,6 +12,7 @@ from klap import (
     GaussianKernel,
     PolynomialKernel,
 )
+from klap.datasets.ground_truth import spherical_eigenvals
 from klap.utils import SAVE_DIR
 from klap.utils.io import NpEncoder
 
@@ -103,6 +104,14 @@ def run_exp(config):
         )
     t = time.time() - t
 
+    # Comparison with ground truth
+    ground_truth = spherical_eigenvals(config.d, config.num_eigenvals)
+    norm = np.sum(ground_truth[1:])
+    ground_truth -= kernel.eigenvalues ** (-1)
+    error = np.abs(ground_truth[1:]).sum() / norm
+
+    # Saving results
+    res["error"] = error
     res["eigenvalues"] = kernel.eigenvalues
     res["time"] = t
     return res
@@ -220,7 +229,7 @@ if __name__ == "__main__":
     grid = {
         "n": np.unique(np.logspace(2, 5, num=10).astype(int)),
         "d": np.arange(3, 20),
-        "p": np.unique(np.logspace(1, 3, num=5).astype(int)),
+        "p": np.unique(np.logspace(1.5, 3, num=5).astype(int)),
         "seed": list(range(42, 52)),
     }
 
