@@ -4,7 +4,9 @@
 
 # Figure savings
 *savings/*
+*.jpg
 *.pdf
+*.png
 
 # Packaging
 *.egg-info/

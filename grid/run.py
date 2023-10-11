@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 
 import numpy as np
+from numpy.random import SeedSequence, default_rng
 
 from klap import (
     ExponentialKernel,
@@ -63,10 +64,10 @@ def run_exp(config):
         res["time"] = 0
         return res
 
-    np.random.seed(config.seed)
+    rng = default_rng(SeedSequence(entropy=12345, spawn_key=(config.seed,)))
 
     # Data generation
-    x = np.random.randn(config.n, config.d)
+    x = rng.standard_normal((config.n, config.d))
     x /= np.linalg.norm(x, axis=-1, keepdims=True)
 
     # Function for Galerkin methods
@@ -243,13 +244,13 @@ if __name__ == "__main__":
         grid.update({
             "graph_laplacian": [-1, 0, 0.01, 0.1, 1, 10, 100],
             "kernel": ["exponential"],
-            "kernel_param": [0.01, 0.1, 1, 10, 100],
+            "kernel_param": [1, 10, 100, 1000],
         })
     elif config.kernel == "gaussian":
         grid.update({
             "graph_laplacian": [-1, 0, 0.01, 0.1, 1, 10, 100],
             "kernel": ["gaussian"],
-            "kernel_param": [0.01, 0.1, 1, 10, 100],
+            "kernel_param": [0.1, 1, 10, 100],
         })
 
     # Output file

@@ -4,7 +4,7 @@ from scipy.special import binom
 
 def spherical_eigenvals(d, k):
     eigenvals = np.empty(k, dtype=float)
-    eigenvals[0] = 0
+    eigenvals[0] = 1
     i, s = 1, 1
     while True:
         N = binom(d + s - 3, s - 1)
@@ -18,4 +18,5 @@ def spherical_eigenvals(d, k):
         i += N
         s += 1
     eigenvals **= -1
+    eigenvals[0] = 0
     return eigenvals
