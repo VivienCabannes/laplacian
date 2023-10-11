@@ -42,8 +42,7 @@ class SlowGaussianKernel(DistanceKernel):
         if not inplace:
             N = N.copy()
         N **= 2
-        N *= -1
-        N /= self.sigma ** 2
+        N /= - self.sigma ** 2
         np.exp(N, out=N)
         return N
 
@@ -61,8 +60,7 @@ class SlowGaussianKernel(DistanceKernel):
             If True, the computation is done inplace
         """
         out = self.q_function(N, inplace=inplace)
-        out *= -1
-        out *= 2
+        out *= -2
         out *= N
         out /= self.sigma ** 2
         return out
