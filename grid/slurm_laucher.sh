@@ -18,4 +18,4 @@
 #SBATCH --array=1-500
 
 
-python /private/home/vivc/code/laplacian/grid/run.py --num-tasks $SLURM_ARRAY_TASK_COUNT --task-id $SLURM_ARRAY_TASK_ID --name eigenvals --kernel polynomial
+python /private/home/vivc/code/laplacian/grid/run.py --num-tasks $SLURM_ARRAY_TASK_COUNT --task-id $SLURM_ARRAY_TASK_ID --name eigenvalsrng --kernel polynomial
