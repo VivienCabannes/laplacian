@@ -13,7 +13,7 @@
 #SBATCH --mem=256G
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=1
 #SBATCH --gpus-per-node=0
 #SBATCH --array=1-500
 

@@ -231,7 +231,7 @@ if __name__ == "__main__":
         "n": np.unique(np.logspace(2, 4, num=10).astype(int)),
         "d": np.arange(3, 20, 2),
         "p": np.unique(np.logspace(1.5, 3, num=5).astype(int)),
-        "seed": list(range(42, 52)),
+        "seed": list(range(100)),
     }
 
     if config.kernel == "polynomial":
@@ -242,13 +242,13 @@ if __name__ == "__main__":
         })
     elif config.kernel == "exponential":
         grid.update({
-            "graph_laplacian": [-1, 0, 0.01, 0.1, 1, 10, 100],
+            "graph_laplacian": [0, 0.01, 0.1, 1, 10, 100],
             "kernel": ["exponential"],
             "kernel_param": [1, 10, 100, 1000],
         })
     elif config.kernel == "gaussian":
         grid.update({
-            "graph_laplacian": [-1, 0, 0.01, 0.1, 1, 10, 100],
+            "graph_laplacian": [0, 0.01, 0.1, 1, 10, 100],
             "kernel": ["gaussian"],
             "kernel_param": [0.1, 1, 10, 100],
         })
