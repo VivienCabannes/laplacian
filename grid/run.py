@@ -273,7 +273,11 @@ if __name__ == "__main__":
         for k, v in zip(grid.keys(), vals):
             setattr(config, k, v)
         # Running experiment
-        res = run_exp(config)
+        try:
+            res = run_exp(config)
+        except Exception:
+            logger.warning(f"Error for configuration: {config}")
+            continue
         # Saving results
         with open(outdir / f"task_{config.task_id}.jsonl", "a") as f:
             print(json.dumps(res, cls=NpEncoder), file=f)
