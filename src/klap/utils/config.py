@@ -1,3 +1,8 @@
+"""
+Configuration files
+
+@ Vivien Cabannes, 2023
+"""
 from pathlib import Path
 
 

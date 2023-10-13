@@ -1,3 +1,8 @@
+"""
+Generic class for fast implementation of operator at play to estimate Laplacian eigendecomposition.
+
+@ Vivien Cabannes, 2023
+"""
 import logging
 
 import numpy as np

@@ -1,3 +1,8 @@
+"""
+Helper functions for writing and reading operations.
+
+@ Vivien Cabannes, 2023
+"""
 import json
 import numpy as np
 

@@ -1,3 +1,8 @@
+"""
+Ground truth eigenvalues
+
+@ Vivien Cabannes, 2023
+"""
 import numpy as np
 from scipy.special import binom
 
