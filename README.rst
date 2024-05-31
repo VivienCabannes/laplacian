@@ -65,5 +65,5 @@ References
 .. _Kernelized Diffusion maps: https://arxiv.org/abs/2302.06757
 
 .. [CAB23] `The Galerkin method beats Graph-Based Approaches for Spectral Algorithms`_, 
-   Vivien Cabannes and Francis Bach, *AISTATS*, 2023.
+   Vivien Cabannes and Francis Bach, *AISTATS*, 2024.
 .. _The Galerkin method beats Graph-Based Approaches for Spectral Algorithms: https://arxiv.org/abs/2306.00742
