@@ -61,9 +61,9 @@ References
    in semi-supervised learning: https://arxiv.org/abs/2009.04324
 
 .. [PIL23] `Kernelized Diffusion maps`_, 
-   Loucas Pillaud-Vivien and Francis Bach, COLT, 2023.
+   Loucas Pillaud-Vivien and Francis Bach, *COLT*, 2023.
 .. _Kernelized Diffusion maps: https://arxiv.org/abs/2302.06757
 
-.. [CAB23] `Going Deeper with Spectral Decomposition`_, 
-   Loucas Pillaud-Vivien and Francis Bach, ArXiv, 2023.
-.. _Going Deeper with Spectral Decomposition: https://arxiv.org/abs/2306.00742
+.. [CAB23] `The Galerkin method beats Graph-Based Approaches for Spectral Algorithms`_, 
+   Vivien Cabannes and Francis Bach, *AISTATS*, 2023.
+.. _The Galerkin method beats Graph-Based Approaches for Spectral Algorithms: https://arxiv.org/abs/2306.00742
